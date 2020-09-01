@@ -1,0 +1,18 @@
+-have to init particles 
+-update their positions 
+-show them 
+-not show them 
+
+
+Trigger: death 
+→check:
+if not counter >300:
+    if not len(zomb.particle)>0:#if not already inited, have to clean it 
+       zomb.particles=[i for i in range(random) new particle]
+    else:#means it is already initialized
+    	for i in zomb.particles:
+    		i.update_pos()
+    		i.show()
+else:
+	zomb.particles=[]
+                  
