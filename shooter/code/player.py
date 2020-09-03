@@ -28,7 +28,7 @@ class Player:
         self.var=var
         self.max_bullet_count=10
 
-        self.bullet_count=1000
+        self.bullet_count=15
 
 
         self.full_bullet_ui_img=pygame.image.load("./images/bullet_count_indicator_full_bullet.png")
@@ -42,7 +42,7 @@ class Player:
         pygame.draw.rect(self.screen,(100,0,100),self.rect)
         
         if self.alive:
-            self.screen.blit(self.rotatedImage,(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
+            self.screen.blit(self.rotatedImage,(self.rect.x,self.rect.y))
         
     
     
@@ -71,6 +71,8 @@ class Player:
             if not( self.velocity.x==0 and self.velocity.y==0):
                 self.velocity.x=0
                 self.velocity.y=0#going to make this smooth down to zero, not just bam zero 
+        #if self.velocity.length()>0 or self.velocity.length()<0:
+            #self.velocity=self.velocity.normalize()
         
     def rot_center(self):
         """rotate an image while keeping its center and size"""
@@ -88,7 +90,7 @@ class Player:
         from pygame import Vector2
         import math
         import pygame
-        mouse_pos=Vector2(pygame.mouse.get_pos()[0]+self.var.camera_scrolling[0],pygame.mouse.get_pos()[1]+self.var.camera_scrolling[1])
+        mouse_pos=Vector2(pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1])
         playerPos=Vector2(self.rect.x+self.rect.w/2,self.rect.y+self.rect.h/2)
         difference =Vector2(mouse_pos-playerPos)
 
@@ -98,6 +100,8 @@ class Player:
    
 
     def update(self):
+        self.rect.x+=self.velocity.x#*self.speed
+        self.rect.y+=self.velocity.y#self.speed
         self.show()
         self.move()
         self.posToAngle()
@@ -113,7 +117,7 @@ class Player:
             angle=math.radians(self.angle)
             bulletVel=Vector2(math.cos(angle),math.sin(angle))
 
-            self.bullets.append(Bullet(self.display_pos+self.rect.w/2,self.rect.y+self.rect.h/2,bulletVel,self.screen,self.bullet_speed,self,self.bul_counter,self.var))
+            self.bullets.append(Bullet(self.rect.x+self.rect.w/2,self.rect.y+self.rect.h/2,bulletVel,self.screen,self.bullet_speed,self,self.bul_counter,self.var))
             self.bul_counter+=1
             self.sound_channel.play(self.shoot_sound)
             self.bullet_count-=1
@@ -152,12 +156,17 @@ class Player:
             if self.rect.colliderect(tile.rect):
                 collide_list.append(tile)
         return collide_list
+
+    def move(self):
+        self.rect.x+=self.velocity.x
+        self.rect.y+=self.velocity.y
+    '''
     def move(self):
         movement=[self.velocity.x*self.speed*-1,self.velocity.y*self.speed*-1]
         #print(f"x speed={movement[0]} y speed={movement[1]} ")
 
         print("old x:",self.rect.x)
-        self.rect.x+=movement[0]#-self.var.camera_scrolling[0]#updating player x pos and later if collide setting it to collide site
+        self.rect.x+=movement[0]#-self.var.camera_scrolling[0]#-self.var.camera_scrolling[0]#updating player x pos and later if collide setting it to collide site
         print("new x:",self.rect.x)
 
 
@@ -171,6 +180,7 @@ class Player:
                 #self.rect.right=i.rect.left
                 #self.rect.left=i.rect.right
                 pass
+
         self.rect.y+=movement[1]#-self.var.camera_scrolling[1]
         for i in collisons:#with checkin the next step i cant just check for movement>0 but - camera_scrolling
             if movement[1]>0:#-self.var.camera_scrolling[1]>0:
@@ -179,3 +189,4 @@ class Player:
             if movement[0]<0:#-self.var.camera_scrolling[0]<0:
                # self.rect.top=i.rect.bottom
                 pass
+            '''

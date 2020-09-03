@@ -40,22 +40,22 @@ class zombie_enemy:
         #pygame.draw.rect(self.screen,(20,20,20),self.rect)
         #print("Dead: ",self.dead)
         if not self.dead:
-            xs=self.var.camera_scrolling[0]
-            ys=self.var.camera_scrolling[1]
+            #xs=self.var.camera_scrolling[0]
+            #ys=self.var.camera_scrolling[1]
             if self.movement_vel.x<0:
                 if frame==0:
-                    self.screen.blit(self.MLImages[0],(self.rect.x+xs,self.rect.y+ys))
+                    self.screen.blit(self.MLImages[0],(self.rect.x,self.rect.y))
                     
                 elif frame==1:
-                    self.screen.blit(self.MLImages[1],(self.rect.x+xs,self.rect.y+ys))
+                    self.screen.blit(self.MLImages[1],(self.rect.x,self.rect.y))
                 else:
                     print("frame erro index out of range")
             elif self.movement_vel.y>0:
                 if frame==0:
-                    self.screen.blit(self.MDImages[0],(self.rect.x+xs,self.rect.y+ys))
+                    self.screen.blit(self.MDImages[0],(self.rect.x,self.rect.y))
                     
                 elif frame==1:
-                    self.screen.blit(self.MDImages[1],(self.rect.x+xs,self.rect.y+ys))
+                    self.screen.blit(self.MDImages[1],(self.rect.x,self.rect.y))
                 else:
                     print("frame erro index out of range")
             elif self.movement_vel.x>0:
@@ -158,7 +158,7 @@ class Particle:
                 self.screen=screen
                 self.var=var
             def show(self):
-                pygame.draw.rect(self.screen,self.get_color(),(self.x+self.var.camera_scrolling[0],self.y+self.var.camera_scrolling[1],self.w,self.w))
+                pygame.draw.rect(self.screen,self.get_color(),(self.x,self.y,self.w,self.w))
             def update_pos(self):
                 self.x+=self.vx#-self.var.camera_scrolling[0]
                 self.y+=self.vy#-self.var.camera_scrolling[1]

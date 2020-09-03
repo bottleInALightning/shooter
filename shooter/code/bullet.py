@@ -17,7 +17,7 @@ class Bullet:
         self.bul_index=bul_index
         self.var=var
     def show(self):
-        pygame.draw.rect(self.screen,self.color,(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1],self.w,self.w))
+        pygame.draw.rect(self.screen,self.color,(self.rect.x,self.rect.y,self.w,self.w))
     
     def update_pos(self):
         self.rect.x+=self.vel.x*self.speed

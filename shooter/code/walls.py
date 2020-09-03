@@ -14,16 +14,16 @@ class Wall:
     def show(self):
         
 
-        temp_pos_x=self.display_pos.x+self.var.camera_scrolling[0]#-#self.var.camera_scrolling[0]
-        temp_pos_y=self.display_pos.y+self.var.camera_scrolling[1]#-#self.var.camera_scrolling[1]
-
+        
         #print(f"real-pos:{self.rect.x}, {self.rect.y} ")
         #print(f"display-pos:{self.display_pos.x},{self.display_pos.y} ")
-        self.screen.blit(self.image,(temp_pos_x,temp_pos_y))
-    '''def update_pos(self):
-        self.rect.x-=self.var.camera_scrolling[0]
-        self.rect.y-=self.var.camera_scrolling[1]
-        pass'''
+        self.screen.blit(self.image,(self.rect.x,self.rect.y))
+    def update_pos(self):
+        #print(f"From {self.rect.x} ")
+        #self.rect.x-=self.var.camera_scrolling[0]
+        #self.rect.y-=self.var.camera_scrolling[1]
+       # print(f"To {self.rect.y} ")
+        pass
     def update(self):
-        #self.update_pos()
+        self.update_pos()
         self.show()
