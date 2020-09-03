@@ -16,8 +16,8 @@ class Player:
         self.angle=0
         
         self.velocity=pygame.Vector2(0,0)
-        self.speed=2
-        self.bullet_speed=10
+        self.speed=6
+        self.bullet_speed=5
         self.shoot_timer=0
         self.bullets=[]
         self.bul_counter=0
@@ -28,7 +28,7 @@ class Player:
         self.var=var
         self.max_bullet_count=10
 
-        self.bullet_count=15
+        self.bullet_count=5000
 
 
         self.full_bullet_ui_img=pygame.image.load("./images/bullet_count_indicator_full_bullet.png")
@@ -39,7 +39,6 @@ class Player:
         self.full_bullet_ui_img=pygame.transform.scale(self.full_bullet_ui_img,(self.bullet_w_h[0],self.bullet_w_h[1]))
         self.empty_bullet_ui_img=pygame.transform.scale(self.empty_bullet_ui_img,(self.bullet_w_h[0],self.bullet_w_h[1]))
     def show(self):
-        pygame.draw.rect(self.screen,(100,0,100),self.rect)
         
         if self.alive:
             self.screen.blit(self.rotatedImage,(self.rect.x,self.rect.y))
@@ -100,15 +99,15 @@ class Player:
    
 
     def update(self):
-        self.rect.x+=self.velocity.x#*self.speed
-        self.rect.y+=self.velocity.y#self.speed
+        #self.rect.x+=self.velocity.x#*self.speed
+        #self.rect.y+=self.velocity.y#self.speed
         self.show()
         self.move()
         self.posToAngle()
         self.rot_center()
         self.update_bullets()
         self.display_bullet_count()
-        print("x: {}, y: {}".format(self.rect.x,self.rect.y))
+        #print("x: {}, y: {}".format(self.rect.x,self.rect.y))
         
         
     def shoot(self,event):
@@ -159,9 +158,31 @@ class Player:
 
     def move(self):
         self.rect.x+=self.velocity.x
+       
+
+        collisions=self.check_wall_collision()
+
+        for i in collisions:
+            if self.velocity.x>0:#moving right
+                self.rect.right=i.rect.left
+            if self.velocity.x<0:#moving left
+                self.rect.left=i.rect.right
+        
         self.rect.y+=self.velocity.y
+        collisions=self.check_wall_collision()
+        for i in collisions:
+           
+            if self.velocity.y>0:
+                self.rect.bottom=i.rect.top
+            if self.velocity.y<0:
+                self.rect.top=i.rect.bottom
+
+
+        #moveme
+
+
     '''
-    def move(self):
+    
         movement=[self.velocity.x*self.speed*-1,self.velocity.y*self.speed*-1]
         #print(f"x speed={movement[0]} y speed={movement[1]} ")
 

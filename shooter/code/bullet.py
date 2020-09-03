@@ -16,14 +16,28 @@ class Bullet:
         self.player=player
         self.bul_index=bul_index
         self.var=var
+
+        self.last_pos=self.rect
     def show(self):
+        pygame.draw.rect(self.screen,self.color,(self.last_pos.x,self.last_pos.y,self.w,self.w))
         pygame.draw.rect(self.screen,self.color,(self.rect.x,self.rect.y,self.w,self.w))
-    
+        self.last_pos=self.rect
     def update_pos(self):
         self.rect.x+=self.vel.x*self.speed
         self.rect.y+=self.vel.y*self.speed
+        #currently checks if bullet is supposed to die
+        self.check_bounce()
 
         
+    def check_bounce(self):
+        
+        collide_list=[]
+        for tile in self.var.walls:
+            if self.rect.colliderect(tile.rect):
+                collide_list.append(tile)
+        collide_list
+        if len(collide_list)>0:
+            self.player.bullets.remove(self)
 
     def update(self):
         self.update_pos()
