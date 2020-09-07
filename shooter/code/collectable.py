@@ -22,7 +22,7 @@ class Collectable:
         #self.display_pos[1]=self.rect.y+self.var.camera_scrolling[1]
 
 
-        self.screen.blit(self.images[index],(self.rect.x,self.rect.y))
+        self.screen.blit(self.images[index],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
    
     def check_collected(self):
         
@@ -36,12 +36,8 @@ class Collectable:
                 else:
                     self.sound_channel.play(self.max_bullets_reached_sound)
                 break
-    def update_pos(self):
-        
-        #self.rect.x-=self.var.camera_scrolling[0]
-        #self.rect.y-=self.var.camera_scrolling[1]
-        pass
+    
     def update(self):
-        #self.update_pos()
+        
         self.show(0)
         self.check_collected()

@@ -21,7 +21,7 @@ class Map:
     def load_map_data(self):
         import ast
         map_indices_list=None
-        with open("./Maps/map_data1.txt","r") as map:
+        with open("./Maps/test_map2.txt","r") as map:
             map_s=map.read()
            
             #map_indicies_list=ast.literal_eval(map_s)
@@ -49,11 +49,11 @@ class Map:
             x=0
             for col in layer:
                 if col==1:
-                    self.screen.blit(self.tiles[1],(x*self.tile_size,y*self.tile_size))
+                    self.screen.blit(self.tiles[1],(x*self.tile_size-self.var.camera_scrolling[0],y*self.tile_size-self.var.camera_scrolling[1]))
                 
                 elif col==3:
                    
-                    self.screen.blit(self.tiles[3],(x*self.tile_size,y*self.tile_size))
+                    self.screen.blit(self.tiles[3],(x*self.tile_size-self.var.camera_scrolling[0],y*self.tile_size-self.var.camera_scrolling[1]))
                 x+=1
             
             y+=1

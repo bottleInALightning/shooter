@@ -13,7 +13,7 @@ class zombie_enemy:
         self.movement_vel=pygame.Vector2(1,0)
         self.movement_acc=pygame.Vector2()
         self.angle=0
-        self.speed=2
+        self.speed=4
 
         self.sound_channel=pygame.mixer.find_channel(True)
         self.sound_channel.set_volume(0.8)
@@ -25,6 +25,7 @@ class zombie_enemy:
         self.death_blood_particle_speed=2
         self.frame_start_death_animation=-1
 
+        self.detection_range=400
         
         try:
             self.MLImages=[pygame.image.load("./images/MLImage1.png"),pygame.image.load("./images/MLImage2.png")]
@@ -44,26 +45,26 @@ class zombie_enemy:
             #ys=self.var.camera_scrolling[1]
             if self.movement_vel.x<0:
                 if frame==0:
-                    self.screen.blit(self.MLImages[0],(self.rect.x,self.rect.y))
+                    self.screen.blit(self.MLImages[0],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
                     
                 elif frame==1:
-                    self.screen.blit(self.MLImages[1],(self.rect.x,self.rect.y))
+                    self.screen.blit(self.MLImages[1],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
                 else:
                     print("frame erro index out of range")
             elif self.movement_vel.y>0:
                 if frame==0:
-                    self.screen.blit(self.MDImages[0],(self.rect.x,self.rect.y))
+                    self.screen.blit(self.MDImages[0],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
                     
                 elif frame==1:
-                    self.screen.blit(self.MDImages[1],(self.rect.x,self.rect.y))
+                    self.screen.blit(self.MDImages[1],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
                 else:
                     print("frame erro index out of range")
             elif self.movement_vel.x>0:
                 if frame==0:
-                    self.screen.blit(self.MRImages[0],(self.rect.x,self.rect.y))
+                    self.screen.blit(self.MRImages[0],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
                     
                 elif frame==1:
-                    self.screen.blit(self.MRImages[1],(self.rect.x,self.rect.y))
+                    self.screen.blit(self.MRImages[1],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
                 else:
                     print("frame erro index out of range")
     def check_shot(self,player,animation_counter):
@@ -77,8 +78,10 @@ class zombie_enemy:
 
                         print("I dead")
                         self.dead=True
+                        self.var.player_points+=1
                         self.sound_channel.play(self.die_sound)
                         self.frame_start_death_animation=animation_counter
+
             self.update_show_death_particles(animation_counter)
             
                     
@@ -112,11 +115,15 @@ class zombie_enemy:
 
     def move_to_player(self):
         import math
+        import random
         from pygame import  Vector2
-        angle=math.radians(self.angle)
-        self.movement_vel=Vector2(math.cos(angle)*self.speed,math.sin(angle)*self.speed)
+        dist=math.sqrt((self.var.player.rect.x-self.rect.x)**2+(self.var.player.rect.y-self.rect.y)**2)
+        if dist <self.detection_range:
+            angle=math.radians(self.angle)
+            self.movement_vel=Vector2(math.cos(angle)*self.speed,math.sin(angle)*self.speed)
 
-    
+        else:
+            self.movement_vel=Vector2(random.randint(-1,1)*self.speed,random.randint(-1,1)*self.speed)
     def update(self,player,frame,animation_counter):
         
         self.update_pos()
@@ -141,6 +148,7 @@ class zombie_enemy:
                     for i in self.death_blood_particles:
                         i.update_pos()
                         i.show()
+                       
             else:
                 print("end, i think i dont get here")       
                 self.death_blood_particles=[]
@@ -158,7 +166,7 @@ class Particle:
                 self.screen=screen
                 self.var=var
             def show(self):
-                pygame.draw.rect(self.screen,self.get_color(),(self.x,self.y,self.w,self.w))
+                pygame.draw.rect(self.screen,self.get_color(),(self.x-self.var.camera_scrolling[0],self.y-self.var.camera_scrolling[1],self.w,self.w))
             def update_pos(self):
                 self.x+=self.vx#-self.var.camera_scrolling[0]
                 self.y+=self.vy#-self.var.camera_scrolling[1]

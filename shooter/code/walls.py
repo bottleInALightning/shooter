@@ -9,7 +9,7 @@ class Wall:
         
         self.collision=collision#True or false
 
-        self.display_pos=pygame.Vector2(self.rect.x,self.rect.y)
+        
         self.screen=screen
     def show(self):
         
@@ -17,13 +17,8 @@ class Wall:
         
         #print(f"real-pos:{self.rect.x}, {self.rect.y} ")
         #print(f"display-pos:{self.display_pos.x},{self.display_pos.y} ")
-        self.screen.blit(self.image,(self.rect.x,self.rect.y))
-    def update_pos(self):
-        #print(f"From {self.rect.x} ")
-        #self.rect.x-=self.var.camera_scrolling[0]
-        #self.rect.y-=self.var.camera_scrolling[1]
-       # print(f"To {self.rect.y} ")
-        pass
+        self.screen.blit(self.image,(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
+   
     def update(self):
-        self.update_pos()
+       
         self.show()
