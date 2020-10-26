@@ -2,9 +2,9 @@ import pygame
 import random
 pygame.init()
 
-class zombie_enemy:
+class ghost_enemy:
     def __init__(self,screen,x,y,w,h,var):
-        self.enemy_type="zombie"
+        self.enemy_type="ghost"
         self.screen=screen
         self.rect=pygame.Rect(x,y,w,h)
         self.hitbox=self.rect
@@ -14,7 +14,7 @@ class zombie_enemy:
         self.movement_vel=pygame.Vector2(1,0)
         self.movement_acc=pygame.Vector2()
         self.angle=0
-        self.speed=4
+        self.speed=2
 
         self.sound_channel=pygame.mixer.find_channel(True)
         self.sound_channel.set_volume(0.8)
@@ -34,47 +34,12 @@ class zombie_enemy:
         self.collided_left=False
 
         self.moving=False
-        
-        try:
-            self.MLImages=[pygame.image.load("./images/MLImage1.png"),pygame.image.load("./images/MLImage2.png")]
-            self.MDImages=[pygame.image.load("./images/MDImage1.png"),pygame.image.load("./images/MDImage2.png")]
-            self.MRImages=[pygame.image.load("./images/MRImage1.png"),pygame.image.load("./images/MRImage2.png")]
-        except:
-            print("Image loading error, you must be in the same directory as __main__.py for it to work you moron")
-        self.MLImages=[pygame.transform.scale(i,(self.rect.w,self.rect.h)) for i in self.MLImages]
-        self.MDImages=[pygame.transform.scale(i,(self.rect.w,self.rect.h)) for i in self.MDImages]
-        self.MRImages=[pygame.transform.scale(i,(self.rect.w,self.rect.h)) for i in self.MRImages]
-
+        self.test_image=pygame.image.load("./images/ghost_enemy_test_version.png")
+        self.test_image=pygame.transform.scale(self.test_image,(self.rect.w,self.rect.h))
     def show(self,frame):
-        #pygame.draw.rect(self.screen,(20,20,20),self.rect)
-        #print("Dead: ",self.dead)
-        if not self.dead:
-            #xs=self.var.camera_scrolling[0]
-            #ys=self.var.camera_scrolling[1]
-            if self.movement_vel.x<0:
-                if frame==0:
-                    self.screen.blit(self.MLImages[0],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
-                    
-                elif frame==1:
-                    self.screen.blit(self.MLImages[1],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
-                else:
-                    print("frame erro index out of range")
-            elif self.movement_vel.y>0:
-                if frame==0:
-                    self.screen.blit(self.MDImages[0],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
-                    
-                elif frame==1:
-                    self.screen.blit(self.MDImages[1],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
-                else:
-                    print("frame erro index out of range")
-            elif self.movement_vel.x>0:
-                if frame==0:
-                    self.screen.blit(self.MRImages[0],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
-                    
-                elif frame==1:
-                    self.screen.blit(self.MRImages[1],(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
-                else:
-                    print("frame erro index out of range")
+      if not self.dead:
+          self.screen.blit(self.test_image,(self.rect.x-self.var.camera_scrolling[0],self.rect.y-self.var.camera_scrolling[1]))
+          #showing enemyd
     def check_shot(self,player,animation_counter):
         
         try:
@@ -119,7 +84,7 @@ class zombie_enemy:
         own_pos=Vector2(self.rect.x+self.rect.w/2,self.rect.y+self.rect.h/2)
         difference =Vector2(player_pos-own_pos)
 
-        rotation_z=math.atan2(difference.y,difference.x)
+        #rotation_z=math.atan2(difference.y,difference.x)
        
         self.angle=360-(180 / math.pi) * -math.atan2(difference.y, difference.x)
 
@@ -217,12 +182,13 @@ class Particle:
             def show(self):
                 if self.x-self.var.camera_scrolling[0] >-40 and self.x-self.var.camera_scrolling[0]<self.var.window_width+40:
                     if self.y-self.var.camera_scrolling[1] >-40 and self.y-self.var.camera_scrolling[1]<self.var.window_height+40:
-                            
+ 
                         pygame.draw.rect(self.screen,self.get_color(),(self.x-self.var.camera_scrolling[0],self.y-self.var.camera_scrolling[1],self.w,self.w))
             def update_pos(self):
                 self.x+=self.vx#-self.var.camera_scrolling[0]
                 self.y+=self.vy#-self.var.camera_scrolling[1]
             def get_color(self):
                 from random import randint
-                return (randint(110,180),randint(10,30),randint(10,30))
+                #base color (58, 248, 90)
+                return (randint(20,70),randint(190,250),randint(50,100))
             
